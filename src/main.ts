@@ -32,6 +32,14 @@ export class App implements OnInit, OnDestroy {
       error: err => console.log('error from event', err),
       complete: () => console.log('complete from event')
     });
+
+    const keys: string[] = []; 
+    this.subEvent = fromEvent(document, 'keydown').subscribe({
+      next: event => {
+         keys.push((event as KeyboardEvent).key)
+         console.log('key array', keys);
+      }
+    });
   }
 
   ngOnDestroy(): void {
