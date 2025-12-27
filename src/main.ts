@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
+import { Subscription, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +11,17 @@ import { bootstrapApplication } from '@angular/platform-browser';
     </a>
   `,
 })
-export class App {
+export class App implements OnInit, OnDestroy {
   name = 'JJ Angular';
+  sub! : Subscription;
+
+  ngOnInit(): void {
+    this.sub = of(2,4,6,8).subscribe(item => console.log('value from of:', item))
+  }
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+  
 }
 
 bootstrapApplication(App);
