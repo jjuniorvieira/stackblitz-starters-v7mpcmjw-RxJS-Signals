@@ -1,6 +1,7 @@
+import { isNgTemplate } from '@angular/compiler';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Subscription, of } from 'rxjs';
+import { Subscription, from, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -15,14 +16,22 @@ export class App implements OnInit, OnDestroy {
   name = 'JJ Angular';
   sub! : Subscription;
   subArray! : Subscription;
+  subFrom! : Subscription;
 
   ngOnInit(): void {
     this.sub = of(2,4,6,8).subscribe(item => console.log('value from of:', item))
-    this.subArray = of([2,4,6,8]).subscribe(item => console.log('value from of array:', item))
+    this.subArray = of([2,4,6,8]).subscribe(item => console.log('value from array:', item))
+    this.subFrom = from([13,14,15,6]).subscribe({
+      next: item => console.log('value from from', item),
+      error: err => console.log('error', err),
+      complete: () => console.log('complete from')
+    });
   }
+
   ngOnDestroy(): void {
     this.sub.unsubscribe();
     this.subArray.unsubscribe();
+    this.subFrom.unsubscribe();
   }
   
 }
