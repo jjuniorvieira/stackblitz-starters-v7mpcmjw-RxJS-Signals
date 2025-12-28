@@ -1,7 +1,7 @@
 import { isNgTemplate } from '@angular/compiler';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Subscription, from, fromEvent, map, of } from 'rxjs';
+import { Subscription, from, fromEvent, map, of, tap } from 'rxjs';
 import { iterator } from 'rxjs/internal/symbol/iterator';
 
 @Component({
@@ -16,6 +16,7 @@ import { iterator } from 'rxjs/internal/symbol/iterator';
 export class App implements OnInit, OnDestroy {
   name = 'JJ Angular';
   subApples! : Subscription;
+  sub! : Subscription;
 
   ngOnInit(): void {
     const apples$ = from([ // observable
@@ -26,11 +27,17 @@ export class App implements OnInit, OnDestroy {
 
     this.subApples = apples$ // subscription
       .pipe(
-        map(item => ({...item, color: 'red'}))
+        map(item => ({...item, color: 'red'})),
+        tap(item => console.log('Apple:', item))
       )
-      .subscribe(
-        item => console.log('Apple', item) // observer
-        ); 
+      .subscribe();
+
+    this.sub = of(2,4,6)
+      .pipe(
+        map(item => item * 2),
+        tap(item => console.log('Item:', item))
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {
