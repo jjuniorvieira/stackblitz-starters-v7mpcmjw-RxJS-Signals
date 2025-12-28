@@ -1,7 +1,7 @@
 import { isNgTemplate } from '@angular/compiler';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Subscription, from, fromEvent, map, of, tap } from 'rxjs';
+import { Subscription, filter, from, fromEvent, map, of, tap } from 'rxjs';
 import { iterator } from 'rxjs/internal/symbol/iterator';
 
 @Component({
@@ -34,6 +34,7 @@ export class App implements OnInit, OnDestroy {
 
     this.sub = of(2,4,6)
       .pipe(
+        filter(item => item % 2 === 0),
         map(item => item * 2),
         tap(item => console.log('Item:', item))
       )
