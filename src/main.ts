@@ -1,7 +1,7 @@
 import { isNgTemplate } from '@angular/compiler';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Subscription, filter, from, fromEvent, map, of, tap } from 'rxjs';
+import { Subscription, filter, from, fromEvent, map, of, take, tap, timer } from 'rxjs';
 import { iterator } from 'rxjs/internal/symbol/iterator';
 
 @Component({
@@ -17,6 +17,7 @@ export class App implements OnInit, OnDestroy {
   name = 'JJ Angular';
   subApples! : Subscription;
   sub! : Subscription;
+  subTimer!: Subscription;
 
   ngOnInit(): void {
     const apples$ = from([ // observable
@@ -39,11 +40,25 @@ export class App implements OnInit, OnDestroy {
         tap(item => console.log('Item:', item))
       )
       .subscribe();
+
+      this.subTimer = timer(0,1000).pipe(
+        take(5)
+      )
+      .subscribe(
+        {
+          next: (item) => console.log('timer', item),
+          error: (err) => console.log('err', err),
+          complete: ()  => console.log('complete')
+        }
+
+      )
   }
 
   ngOnDestroy(): void {
     this.subApples.unsubscribe();
+    this.subTimer.unsubscribe();
   }
+
   
 }
 
