@@ -50,7 +50,6 @@ export class App implements OnInit, OnDestroy {
           error: (err) => console.log('err', err),
           complete: ()  => console.log('complete')
         }
-
       )
   }
 
